@@ -18,16 +18,8 @@ public class ProductService {
         return repository.findAll();
     }
 
-    public void saveProduct(Product product) {
-        repository.save(product);
-    }
-
     public Product getProduct(Integer id) {
         return repository.findById(id).get();
-    }
-
-    public void deleteProduct(Integer id) {
-        repository.deleteById(id);
     }
 
     public List<Product> findByName(String name) {
@@ -36,6 +28,14 @@ public class ProductService {
 
     public List<Product> findByPriceGreaterThan(float price) {
         return repository.findByPriceGreaterThan(price);
+    }
+
+    public void saveProduct(Product product) {
+        repository.save(product);
+    }
+
+    public void deleteProduct(Integer id) {
+        repository.deleteById(id);
     }
 
 }
