@@ -30,4 +30,12 @@ public class ProductService {
         repository.deleteById(id);
     }
 
+    public List<Product> findByName(String name) {
+        return repository.findByName(name);
+    }
+
+    public List<Product> findByPriceGreaterThan(float price) {
+        return repository.findByPriceGreaterThan(price);
+    }
+
 }

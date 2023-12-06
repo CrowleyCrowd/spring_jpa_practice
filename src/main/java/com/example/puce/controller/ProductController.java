@@ -3,6 +3,8 @@ package com.example.puce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.puce.model.Product;
 import com.example.puce.service.ProductService;
-
-
-
 
 @RestController
 @RequestMapping("/api/v1")
@@ -31,14 +30,36 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public Product getProduct(@PathVariable Integer id) {
-        return service.getProduct(id);
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
+        try {
+            Product product = service.getProduct(id);
+            return new ResponseEntity<Product>(product, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+        }
     }
-    
+
+    @GetMapping("/products/name/{name}")
+    public List<Product> findByName(@PathVariable String name) {
+        return service.findByName(name);
+    }
+
+    @GetMapping("/products/price/{price}")
+    public List<Product> findByPriceGreaterThan(@PathVariable float price) {
+        return service.findByPriceGreaterThan(price);
+    }
+
     @PostMapping("/products")
     public Product saveProduct(@RequestBody Product product) {
         service.saveProduct(product);
         return product;
+    }
+
+    @PutMapping("products/{id}")
+    public Product updateProduct(@RequestBody Product product, @PathVariable Integer id) {
+        service.saveProduct(product);
+        Product productUpdated = service.getProduct(id);
+        return productUpdated;
     }
 
     @DeleteMapping("/products/{id}")
@@ -46,13 +67,4 @@ public class ProductController {
         service.deleteProduct(id);
     }
 
-    @PutMapping("products/{id}")
-    public Product updateProduct (@RequestBody Product product, @PathVariable Integer id) {
-        service.saveProduct(product);
-        Product productUpdated = service.getProduct(id);
-        return productUpdated;
-    }
-
-
-    
 }
